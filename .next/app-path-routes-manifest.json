@@ -1,0 +1,20 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/dashboard/route": "/api/dashboard",
+  "/api/activity-logs/route": "/api/activity-logs",
+  "/api/duties/route": "/api/duties",
+  "/api/settings/route": "/api/settings",
+  "/api/scanner/verify/route": "/api/scanner/verify",
+  "/api/volunteers/route": "/api/volunteers",
+  "/api/verify/[token]/route": "/api/verify/[token]",
+  "/activity-logs/page": "/activity-logs",
+  "/dashboard/page": "/dashboard",
+  "/duties/page": "/duties",
+  "/login/page": "/login",
+  "/page": "/",
+  "/qr/[id]/page": "/qr/[id]",
+  "/scanner/page": "/scanner",
+  "/settings/page": "/settings",
+  "/verify/[token]/page": "/verify/[token]",
+  "/volunteers/page": "/volunteers"
+}

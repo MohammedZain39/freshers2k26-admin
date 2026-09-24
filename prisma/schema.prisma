@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Volunteer {
+  id          String   @id @default(cuid())
+  name        String
+  collegeId   String   @unique
+  department  String?
+  year        String?
+  phone       String?
+  email       String?
+  photoUrl    String?
+  role        String   @default("Volunteer")
+  qrToken     String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  duties      DutyAssignment[]
+  scanLogs    ScanLog[]
+
+  @@index([name])
+  @@index([collegeId])
+}
+
+model DutyAssignment {
+  id          String   @id @default(cuid())
+
+  volunteerId String
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime
+
+  team        String
+  location    String
+  description String?
+
+  assignedBy  String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([volunteerId])
+  @@index([date])
+}
+
+model ScanLog {
+  id           String   @id @default(cuid())
+
+  volunteerId  String?
+  volunteer    Volunteer? @relation(fields: [volunteerId], references: [id], onDelete: SetNull)
+
+  scannedAt    DateTime @default(now())
+
+  result       String
+  reason       String?
+
+  gate         String?
+  scannerId    String?
+
+  @@index([scannedAt])
+  @@index([volunteerId])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+
+  name         String
+  email        String   @unique
+
+  passwordHash String
+
+  role         String   @default("EVENT_ADMIN")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([email])
+}
+model EventSettings {
+  id                  String   @id @default(cuid())
+
+  eventName           String   @default("Freshers")
+  eventYear           String   @default("2026")
+  eventStatus         String   @default("ACTIVE")
+
+  allowVerification   Boolean  @default(true)
+  showVolunteerPhone  Boolean  @default(false)
+  showVolunteerEmail  Boolean  @default(false)
+
+  updatedAt           DateTime @updatedAt
+}
