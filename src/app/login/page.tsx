@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import {
   ShieldCheck,
   ArrowRight,
@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Login() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -29,6 +29,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           email,
           password,
@@ -154,6 +155,7 @@ export default function Login() {
                     size={17}
                     className="mt-0.5 shrink-0"
                   />
+
                   <span>{error}</span>
                 </div>
               )}
@@ -178,5 +180,17 @@ export default function Login() {
         </section>
       </div>
     </main>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-[#07070a]" />
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
