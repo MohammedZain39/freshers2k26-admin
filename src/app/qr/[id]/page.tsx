@@ -21,10 +21,12 @@ export default async function QRPage({ params }: PageProps) {
     notFound();
   }
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = (
+  process.env.NEXT_PUBLIC_APP_URL ||
+  "https://freshers2k26-admin.vercel.app"
+).replace(/\/$/, "");
 
-  const verifyUrl = `${baseUrl}/verify/${volunteer.qrToken}`;
+const verifyUrl = `${baseUrl}/verify/${volunteer.qrToken}`;
 
   const qrDataUrl = await QRCode.toDataURL(verifyUrl, {
     width: 700,

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @"
+=======
+node_modules
+>>>>>>> 14606131 (Fix duty date timezone display)
 node_modules/
 .next/
 .vercel/
@@ -6,5 +10,9 @@ node_modules/
 .env.local
 .env.*.local
 *.log
+<<<<<<< HEAD
 src/generated/prisma/
 "@ | Set-Content .gitignore
+=======
+src/generated/prisma/
+>>>>>>> 14606131 (Fix duty date timezone display)

@@ -64,6 +64,7 @@ function formatDate(dateString: string) {
   const date = new Date(dateString);
 
   return date.toLocaleDateString("en-IN", {
+    timeZone: "Asia/Kolkata",
     weekday: "long",
     day: "numeric",
     month: "long",
