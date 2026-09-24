@@ -61,10 +61,20 @@ const emptyForm: DutyForm = {
 };
 
 function formatDate(dateString: string) {
-  const date = new Date(dateString);
+  // Duty dates are calendar dates, not UTC timestamps.
+  // Extract the YYYY-MM-DD portion directly so the date
+  // cannot shift backward/forward because of timezone conversion.
+  const datePart = dateString.slice(0, 10);
+
+  const [year, month, day] = datePart.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return dateString;
+  }
+
+  const date = new Date(year, month - 1, day);
 
   return date.toLocaleDateString("en-IN", {
-    timeZone: "Asia/Kolkata",
     weekday: "long",
     day: "numeric",
     month: "long",
