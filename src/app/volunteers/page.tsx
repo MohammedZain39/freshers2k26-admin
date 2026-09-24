@@ -12,7 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import PageShell from "@/components/PageShell";
-
+import AuthGuard from "@/components/AuthGuard";
 type Volunteer = {
   id: string;
   name: string;
@@ -271,6 +271,7 @@ export default function VolunteersPage() {
   }
 
   return (
+    <AuthGuard>
     <PageShell
       title="Volunteers"
       subtitle="Manage registered volunteers, credentials and assignments."
@@ -676,6 +677,7 @@ export default function VolunteersPage() {
         </div>
       )}
     </PageShell>
+    </AuthGuard>
   );
 }
 

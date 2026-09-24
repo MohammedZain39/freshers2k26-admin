@@ -53,6 +53,19 @@ const systemItems = [
 export default function Sidebar() {
   const pathname = usePathname();
 
+  async function handleLogout() {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      window.location.href = '/login';
+    }
+  }
+
   return (
     <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[276px] border-r border-white/[0.07] bg-[#07070a]/95 backdrop-blur-2xl lg:flex lg:flex-col">
 
@@ -224,13 +237,15 @@ export default function Sidebar() {
             </div>
           </div>
 
-          <Link
-            href="/login"
-            className="mt-3 flex items-center gap-2 border-t border-white/[0.06] pt-3 text-xs text-white/30 transition hover:text-white"
+          {/* Logout */}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="mt-3 flex w-full items-center gap-2 border-t border-white/[0.06] pt-3 text-left text-xs text-white/30 transition hover:text-white"
           >
             <LogOut size={14} />
             Sign out
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

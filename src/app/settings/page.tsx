@@ -15,6 +15,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import PageShell from "@/components/PageShell";
+import AuthGuard from "@/components/AuthGuard";
 
 type Settings = {
   eventName: string;
@@ -191,6 +192,7 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
+        <AuthGuard>
       <PageShell
         title="Settings"
         subtitle="Manage event configuration, verification behavior and administrator information."
@@ -202,6 +204,7 @@ export default function SettingsPage() {
           </div>
         </div>
       </PageShell>
+      </AuthGuard>
     );
   }
 

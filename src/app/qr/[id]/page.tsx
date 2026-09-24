@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import QRCode from "qrcode";
-
+import AuthGuard from "@/components/AuthGuard";
 type PageProps = {
   params: Promise<{
     id: string;
@@ -35,6 +35,7 @@ const verifyUrl = `${baseUrl}/verify/${volunteer.qrToken}`;
   });
 
   return (
+    <AuthGuard>
     <main className="min-h-screen bg-[#050507] px-5 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-3xl">
 
@@ -183,5 +184,6 @@ const verifyUrl = `${baseUrl}/verify/${volunteer.qrToken}`;
 
       </div>
     </main>
+    </AuthGuard>
   );
 }

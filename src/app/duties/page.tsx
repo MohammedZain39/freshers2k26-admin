@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import PageShell from "@/components/PageShell";
+import AuthGuard from "@/components/AuthGuard";
 import {
   CalendarDays,
   ChevronLeft,
@@ -457,6 +458,7 @@ export default function DutiesPage() {
   }
 
   return (
+    <AuthGuard>
     <PageShell
       title="Daily Duties"
       subtitle="Choose who is authorized to work for the selected event day."
@@ -831,6 +833,7 @@ export default function DutiesPage() {
         </div>
       )}
     </PageShell>
+    </AuthGuard>
   );
 }
 

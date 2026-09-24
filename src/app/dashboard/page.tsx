@@ -12,7 +12,7 @@ import {
   UserX,
   XCircle,
 } from "lucide-react";
-
+import AuthGuard from "@/components/AuthGuard";
 import PageShell from "@/components/PageShell";
 
 interface DashboardData {
@@ -150,6 +150,7 @@ export default function Dashboard() {
   const stats = data?.stats;
 
   return (
+    <AuthGuard>
     <PageShell
       title="Good afternoon, Admin"
       subtitle="A live overview of volunteer authorization, daily duties and event access."
@@ -404,6 +405,7 @@ export default function Dashboard() {
         </>
       )}
     </PageShell>
+    </AuthGuard>
   );
 }
 

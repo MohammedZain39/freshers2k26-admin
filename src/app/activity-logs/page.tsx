@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import PageShell from "@/components/PageShell";
+import AuthGuard from "@/components/AuthGuard";
 import {
   Activity,
   CheckCircle2,
@@ -148,6 +149,7 @@ export default function ActivityLogsPage() {
   const rejectedCount = logs.length - authorizedCount;
 
   return (
+    <AuthGuard>
     <PageShell
       title="Activity Logs"
       subtitle="Monitor every QR verification attempt recorded by the system."
@@ -469,6 +471,7 @@ export default function ActivityLogsPage() {
         </div>
       </section>
     </PageShell>
+    </AuthGuard>
   );
 }
 

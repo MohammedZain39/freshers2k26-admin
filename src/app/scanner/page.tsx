@@ -15,6 +15,7 @@ import {
   QrCode,
 } from 'lucide-react';
 import PageShell from '@/components/PageShell';
+import AuthGuard from "@/components/AuthGuard";
 
 type ScanResult = {
   authorized: boolean;
@@ -202,6 +203,7 @@ export default function ScannerPage() {
   };
 
   return (
+    <AuthGuard>
     <PageShell
       title="Verify QR"
       subtitle="Scan a volunteer ID card and verify their current event authorization."
@@ -409,6 +411,7 @@ export default function ScannerPage() {
 
       </div>
     </PageShell>
+    </AuthGuard>
   );
 }
 

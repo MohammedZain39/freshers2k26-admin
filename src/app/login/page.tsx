@@ -1,3 +1,182 @@
-'use client';
-import {FormEvent,useState} from 'react'; import {ShieldCheck,ArrowRight} from 'lucide-react'; import {useRouter} from 'next/navigation';
-export default function Login(){const [loading,setLoading]=useState(false); const router=useRouter(); function submit(e:FormEvent){e.preventDefault();setLoading(true);setTimeout(()=>router.push('/dashboard'),500)} return <main className="min-h-screen overflow-hidden bg-[#07070a] px-6 py-10"><div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-6xl items-center"><section className="hidden w-1/2 pr-20 lg:block"><p className="text-xs uppercase tracking-[.35em] text-violet-300/70">FRESHERS 2026</p><h1 className="mt-6 text-6xl font-semibold leading-[1.02] tracking-tight">Event operations,<br/><span className="text-white/35">under control.</span></h1><p className="mt-6 max-w-md text-base leading-7 text-white/45">A private command center for organizers, volunteer duties, ID cards and real-time event authorization.</p><div className="mt-10 grid grid-cols-3 gap-3">{['Daily duties','QR verification','Entry logs'].map(x=><div key={x} className="rounded-2xl border border-white/10 bg-white/[.03] p-4 text-sm text-white/60">{x}</div>)}</div></section><section className="w-full lg:w-[430px]"><div className="rounded-3xl border border-white/10 bg-white/[.04] p-8 shadow-2xl shadow-black/30 backdrop-blur"><div className="mb-8"><div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-500/15 text-violet-300"><ShieldCheck size={22}/></div><h2 className="text-2xl font-semibold">Admin sign in</h2><p className="mt-2 text-sm text-white/40">Authorized personnel only.</p></div><form onSubmit={submit} className="space-y-5"><label className="block"><span className="mb-2 block text-sm text-white/60">Email</span><input required type="email" placeholder="admin@college.edu" className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none placeholder:text-white/20 focus:border-violet-400/60"/></label><label className="block"><span className="mb-2 block text-sm text-white/60">Password</span><input required type="password" placeholder="••••••••••••" className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none placeholder:text-white/20 focus:border-violet-400/60"/></label><button disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 font-medium text-black transition hover:bg-white/90 disabled:opacity-60">{loading?'Signing in…':'Continue'} {!loading&&<ArrowRight size={17}/>}</button></form><p className="mt-6 text-center text-xs text-white/25">Protected management environment • HTTPS required in production</p></div></section></div></main>}
+"use client";
+
+import { FormEvent, useState } from "react";
+import {
+  ShieldCheck,
+  ArrowRight,
+  AlertCircle,
+} from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+export default function Login() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Invalid email or password.");
+        return;
+      }
+
+      const redirect =
+        searchParams.get("redirect") || "/dashboard";
+
+      router.replace(redirect);
+      router.refresh();
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Unable to connect to the server.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="min-h-screen overflow-hidden bg-[#07070a] px-6 py-10">
+      <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-6xl items-center">
+
+        {/* Left side */}
+        <section className="hidden w-1/2 pr-20 lg:block">
+          <p className="text-xs uppercase tracking-[.35em] text-violet-300/70">
+            FRESHERS 2026
+          </p>
+
+          <h1 className="mt-6 text-6xl font-semibold leading-[1.02] tracking-tight">
+            Event operations,
+            <br />
+            <span className="text-white/35">
+              under control.
+            </span>
+          </h1>
+
+          <p className="mt-6 max-w-md text-base leading-7 text-white/45">
+            A private command center for organizers,
+            volunteer duties, ID cards and real-time event
+            authorization.
+          </p>
+
+          <div className="mt-10 grid grid-cols-3 gap-3">
+            {[
+              "Daily duties",
+              "QR verification",
+              "Entry logs",
+            ].map((x) => (
+              <div
+                key={x}
+                className="rounded-2xl border border-white/10 bg-white/[.03] p-4 text-sm text-white/60"
+              >
+                {x}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Login */}
+        <section className="w-full lg:w-[430px]">
+          <div className="rounded-3xl border border-white/10 bg-white/[.04] p-8 shadow-2xl shadow-black/30 backdrop-blur">
+
+            <div className="mb-8">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-500/15 text-violet-300">
+                <ShieldCheck size={22} />
+              </div>
+
+              <h2 className="text-2xl font-semibold">
+                Admin sign in
+              </h2>
+
+              <p className="mt-2 text-sm text-white/40">
+                Authorized personnel only.
+              </p>
+            </div>
+
+            <form onSubmit={submit} className="space-y-5">
+
+              {/* Email */}
+              <label className="block">
+                <span className="mb-2 block text-sm text-white/60">
+                  Email
+                </span>
+
+                <input
+                  required
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@college.edu"
+                  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none placeholder:text-white/20 focus:border-violet-400/60"
+                />
+              </label>
+
+              {/* Password */}
+              <label className="block">
+                <span className="mb-2 block text-sm text-white/60">
+                  Password
+                </span>
+
+                <input
+                  required
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none placeholder:text-white/20 focus:border-violet-400/60"
+                />
+              </label>
+
+              {/* Error */}
+              {error && (
+                <div className="flex items-start gap-2 rounded-xl border border-red-400/20 bg-red-400/[.06] px-4 py-3 text-sm text-red-300">
+                  <AlertCircle
+                    size={17}
+                    className="mt-0.5 shrink-0"
+                  />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {/* Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 font-medium text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading ? "Signing in..." : "Continue"}
+
+                {!loading && <ArrowRight size={17} />}
+              </button>
+            </form>
+
+            <p className="mt-6 text-center text-xs text-white/25">
+              Protected management environment • HTTPS required
+              in production
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}
